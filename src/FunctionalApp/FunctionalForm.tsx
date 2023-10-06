@@ -1,7 +1,8 @@
 import { FormEvent, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
-import { UserInformation, initialUserData } from "../types";
+import { UserInformation, ValidatedValues } from "../types";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
+import { isEmailValid, containsFalse } from "../utils/validations";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -10,26 +11,39 @@ const cityErrorMessage = "State is Invalid";
 const phoneNumberErrorMessage = "Invalid Phone Number";
 
 type TFunctionalForm = {
-  dataHandler: (data: UserInformation) => void;
+  userDataHandler: (data: UserInformation) => void;
+
+  validatedValues: ValidatedValues;
 };
 
-export const FunctionalForm = ({ dataHandler }: TFunctionalForm) => {
-  const [formData, setFormData] = useState<UserInformation>(initialUserData);
-  //propertyHandler updates formData state on change
-  const propertyHandler = (
-    property: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFormData((prevProp) => ({ ...prevProp, [property]: e.target.value }));
+export const FunctionalForm = ({
+  userDataHandler,
+  validatedValues,
+}: TFunctionalForm) => {
+  // TODO in the object, phone data has to be a string of arrays.
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const tempPhone: string[] = [];
+  const formData: UserInformation = { firstName, lastName, email, city, phone };
+  const reset = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setCity("");
+    setPhone("");
   };
-  //handlerUserData submits form data to parent component
-  const handlerUserData = (e: FormEvent) => {
+
+  const handleUserData = (e: FormEvent) => {
     e.preventDefault();
-    dataHandler(formData);
-    setFormData(initialUserData);
+    userDataHandler(formData);
+    containsFalse(validatedValues) ? reset() : null;
   };
+
   return (
-    <form onSubmit={handlerUserData}>
+    <form onSubmit={handleUserData}>
       <u>
         <h3>User Information Form</h3>
       </u>
@@ -39,49 +53,79 @@ export const FunctionalForm = ({ dataHandler }: TFunctionalForm) => {
         <label>{"First Name"}:</label>
         <input
           placeholder="Bilbo"
-          value={formData.firstName}
-          onChange={(e) => propertyHandler("firstName", e)}
+          value={firstName}
+          onChange={(e) => {
+            setFirstName(e.target.value);
+          }}
         />
       </div>
-      <ErrorMessage message={firstNameErrorMessage} show={true} />
+      <ErrorMessage
+        message={firstNameErrorMessage}
+        show={validatedValues.isValFirstName}
+      />
 
       {/* last name input */}
       <div className="input-wrap">
         <label>{"Last Name"}:</label>
         <input
           placeholder="Baggins"
-          value={formData.lastName}
-          onChange={(e) => propertyHandler("lastName", e)}
+          value={lastName}
+          onChange={(e) => {
+            setLastName(e.target.value);
+          }}
         />
       </div>
-      <ErrorMessage message={lastNameErrorMessage} show={true} />
+      <ErrorMessage
+        message={lastNameErrorMessage}
+        show={validatedValues.isValLastName}
+      />
 
       {/* Email Input */}
       <div className="input-wrap">
         <label>{"Email"}:</label>
         <input
           placeholder="bilbo-baggins@adventurehobbits.net"
-          value={formData.email}
-          onChange={(e) => propertyHandler("email", e)}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
         />
       </div>
-      <ErrorMessage message={emailErrorMessage} show={true} />
+
+      <ErrorMessage
+        message={emailErrorMessage}
+        show={validatedValues.isValEmail && !isEmailValid(email)}
+      />
 
       {/* City Input */}
       <div className="input-wrap">
         <label>{"City"}:</label>
         <input
           placeholder="Hobbiton"
-          value={formData.city}
+          value={city}
           list="cities"
-          onChange={(e) => propertyHandler("city", e)}
+          onChange={(e) => {
+            setCity(e.target.value);
+          }}
         />
       </div>
-      <ErrorMessage message={cityErrorMessage} show={true} />
+      <ErrorMessage
+        message={cityErrorMessage}
+        show={validatedValues.isValCity}
+      />
 
-      <FunctionalPhoneInput />
+      <FunctionalPhoneInput
+        phoneState={tempPhone}
+        handlePhone={(phone) => {
+          const newPhone = phone.join("");
+          newPhone.length === 7 ? setPhone(newPhone) : null;
+        }}
+      />
 
-      <ErrorMessage message={phoneNumberErrorMessage} show={true} />
+      <ErrorMessage
+        message={phoneNumberErrorMessage}
+        show={validatedValues.isValPhone}
+      />
 
       <input type="submit" value="Submit" />
     </form>

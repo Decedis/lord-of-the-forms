@@ -5,10 +5,11 @@ export type UserInformation = {
   city: string;
   phone: string;
 };
-export const initialUserData: UserInformation = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  city: "",
-  phone: "",
+export type ValidatedValues = {
+  [key: string]: boolean;
+  isValFirstName: boolean;
+  isValLastName: boolean;
+  isValEmail: boolean;
+  isValCity: boolean;
+  isValPhone: boolean;
 };
