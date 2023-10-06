@@ -26,12 +26,14 @@ export const FunctionalApp = () => {
     isValCity,
     isValPhone,
   };
+  console.log("validated values: ", validatedValues);
+  console.log("userData: ", userData);
 
   return (
     <>
       <h2>Functional</h2>
       <ProfileInformation
-        userData={containsFalse(validatedValues) ? userData : null}
+        userData={!containsFalse(validatedValues) ? userData : null}
       />
       <FunctionalForm
         userDataHandler={(pulledData) => {

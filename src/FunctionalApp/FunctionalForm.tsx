@@ -2,7 +2,14 @@ import { FormEvent, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation, ValidatedValues } from "../types";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
-import { isEmailValid, containsFalse } from "../utils/validations";
+import {
+  isEmailValid,
+  containsFalse,
+  isNameValid,
+  isCityValid,
+  isPhoneValid,
+} from "../utils/validations";
+import { allCities } from "../utils/all-cities";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -61,7 +68,7 @@ export const FunctionalForm = ({
       </div>
       <ErrorMessage
         message={firstNameErrorMessage}
-        show={validatedValues.isValFirstName}
+        show={validatedValues.isValFirstName && !isNameValid(firstName)}
       />
 
       {/* last name input */}
@@ -77,7 +84,7 @@ export const FunctionalForm = ({
       </div>
       <ErrorMessage
         message={lastNameErrorMessage}
-        show={validatedValues.isValLastName}
+        show={validatedValues.isValLastName && !isNameValid(lastName)}
       />
 
       {/* Email Input */}
@@ -111,7 +118,7 @@ export const FunctionalForm = ({
       </div>
       <ErrorMessage
         message={cityErrorMessage}
-        show={validatedValues.isValCity}
+        show={validatedValues.isValCity && !isCityValid(city, allCities)}
       />
 
       <FunctionalPhoneInput
@@ -124,7 +131,7 @@ export const FunctionalForm = ({
 
       <ErrorMessage
         message={phoneNumberErrorMessage}
-        show={validatedValues.isValPhone}
+        show={validatedValues.isValPhone && !isPhoneValid(phone)}
       />
 
       <input type="submit" value="Submit" />
