@@ -19,34 +19,57 @@ const phoneNumberErrorMessage = "Invalid Phone Number";
 
 type TFunctionalForm = {
   userDataHandler: (data: UserInformation) => void;
-
-  validatedValues: ValidatedValues;
 };
 
-export const FunctionalForm = ({
-  userDataHandler,
-  validatedValues,
-}: TFunctionalForm) => {
-  // TODO in the object, phone data has to be a string of arrays.
+export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [city, setCity] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const tempPhone: string[] = [];
-  const formData: UserInformation = { firstName, lastName, email, city, phone };
+  const [formPhone, setFormPhone] = useState<[string, string, string, string]>([
+    "",
+    "",
+    "",
+    "",
+  ]);
+  //These react to the validity of the input present in the state.
+  // these need to be updated on the fly
+  const validatedValues: ValidatedValues = {
+    isValFirstName: false,
+    isValLastName: false,
+    isValEmail: false,
+    isValCity: false,
+    isValPhone: false,
+  };
+  const phone: string = formPhone.join("");
+  const formData: UserInformation = {
+    firstName,
+    lastName,
+    email,
+    city,
+    phone,
+  };
+
   const reset = () => {
     setFirstName("");
     setLastName("");
     setEmail("");
     setCity("");
-    setPhone("");
+    setFormPhone(["", "", "", ""]); //TODO these don't reset in the form anymore.
   };
 
   const handleUserData = (e: FormEvent) => {
     e.preventDefault();
-    userDataHandler(formData);
-    containsFalse(validatedValues) ? reset() : null;
+    //userDataHandler(formData);
+    if (!containsFalse(validatedValues)) {
+      //this condition doesn't work as expected
+      userDataHandler(formData);
+      reset(); //TODO fix phone reset, it does not work.
+      console.log("formData: ", formData);
+    } else {
+      null;
+    }
+    //containsFalse(validatedValues) ? reset() : null; //TODO this either kind of works or it doesn't
   };
 
   return (
@@ -122,10 +145,9 @@ export const FunctionalForm = ({
       />
 
       <FunctionalPhoneInput
-        phoneState={tempPhone}
+        phoneState={formPhone}
         handlePhone={(phone) => {
-          const newPhone = phone.join("");
-          newPhone.length === 7 ? setPhone(newPhone) : null;
+          setFormPhone(phone);
         }}
       />
 
