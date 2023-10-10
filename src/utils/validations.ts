@@ -15,7 +15,7 @@ export function isPhoneValid(phone: string) {
   return phone.length === 7;
 }
 //utility to check for falsity
-export const containsFalse = (obj: ValidatedValues) => {
+export const isOnlyTrue = (obj: ValidatedValues) => {
   let result;
   for (const key in obj) {
     if (obj[key] === false) {

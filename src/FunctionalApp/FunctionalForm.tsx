@@ -2,14 +2,7 @@ import { FormEvent, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation, ValidatedValues } from "../types";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
-import {
-  isEmailValid,
-  containsFalse,
-  isNameValid,
-  isCityValid,
-  isPhoneValid,
-} from "../utils/validations";
-import { allCities } from "../utils/all-cities";
+import { isOnlyTrue } from "../utils/validations";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -19,9 +12,13 @@ const phoneNumberErrorMessage = "Invalid Phone Number";
 
 type TFunctionalForm = {
   userDataHandler: (data: UserInformation) => void;
+  validatedData: ValidatedValues;
 };
 
-export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
+export const FunctionalForm = ({
+  userDataHandler,
+  validatedData,
+}: TFunctionalForm) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -32,15 +29,6 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
     "",
     "",
   ]);
-  //These react to the validity of the input present in the state.
-  // these need to be updated on the fly
-  const validatedValues: ValidatedValues = {
-    isValFirstName: false,
-    isValLastName: false,
-    isValEmail: false,
-    isValCity: false,
-    isValPhone: false,
-  };
   const phone: string = formPhone.join("");
   const formData: UserInformation = {
     firstName,
@@ -49,27 +37,20 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
     city,
     phone,
   };
-
-  const reset = () => {
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setCity("");
-    setFormPhone(["", "", "", ""]); //TODO these don't reset in the form anymore.
+  const reset = (input: ValidatedValues) => {
+    if (isOnlyTrue(input)) {
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setCity("");
+      setFormPhone(["", "", "", ""]);
+    }
   };
 
   const handleUserData = (e: FormEvent) => {
     e.preventDefault();
-    //userDataHandler(formData);
-    if (!containsFalse(validatedValues)) {
-      //this condition doesn't work as expected
-      userDataHandler(formData);
-      reset(); //TODO fix phone reset, it does not work.
-      console.log("formData: ", formData);
-    } else {
-      null;
-    }
-    //containsFalse(validatedValues) ? reset() : null; //TODO this either kind of works or it doesn't
+    userDataHandler(formData);
+    reset(validatedData);
   };
 
   return (
@@ -91,7 +72,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
       </div>
       <ErrorMessage
         message={firstNameErrorMessage}
-        show={validatedValues.isValFirstName && !isNameValid(firstName)}
+        show={!validatedData.isValFirstName} //the show condition can be simplified into a single value.
       />
 
       {/* last name input */}
@@ -107,7 +88,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
       </div>
       <ErrorMessage
         message={lastNameErrorMessage}
-        show={validatedValues.isValLastName && !isNameValid(lastName)}
+        show={!validatedData.isValLastName}
       />
 
       {/* Email Input */}
@@ -124,7 +105,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
 
       <ErrorMessage
         message={emailErrorMessage}
-        show={validatedValues.isValEmail && !isEmailValid(email)}
+        show={!validatedData.isValEmail}
       />
 
       {/* City Input */}
@@ -141,7 +122,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
       </div>
       <ErrorMessage
         message={cityErrorMessage}
-        show={validatedValues.isValCity && !isCityValid(city, allCities)}
+        show={!validatedData.isValCity}
       />
 
       <FunctionalPhoneInput
@@ -153,7 +134,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
 
       <ErrorMessage
         message={phoneNumberErrorMessage}
-        show={validatedValues.isValPhone && !isPhoneValid(phone)}
+        show={!validatedData.isValPhone}
       />
 
       <input type="submit" value="Submit" />

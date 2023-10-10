@@ -1,39 +1,41 @@
 import { useState } from "react";
 import { ProfileInformation } from "../ProfileInformation";
-import { UserInformation } from "../types";
+import { UserInformation, ValidatedValues } from "../types";
 import { FunctionalForm } from "./FunctionalForm";
-// import {
-//   isEmailValid,
-//   isNameValid,
-//   isCityValid,
-//   containsFalse,
-//   isPhoneValid,
-// } from "../utils/validations";
-// import { allCities } from "../utils/all-cities";
+import {
+  isEmailValid,
+  isNameValid,
+  isCityValid,
+  isOnlyTrue,
+  isPhoneValid,
+} from "../utils/validations";
+import { allCities } from "../utils/all-cities";
 
 export const FunctionalApp = () => {
   const [userData, setUserData] = useState<UserInformation | null>(null);
-  // const [isValFirstName, setIsValFirstName] = useState<boolean>(false);
-  // const [isValLastName, setIsValLastName] = useState<boolean>(false);
-  // const [isValEmail, setIsValEmail] = useState<boolean>(false);
-  // const [isValCity, setValIsCity] = useState<boolean>(false);
-  // const [isValPhone, setIsValPhone] = useState<boolean>(false);
+  const validatedData: ValidatedValues = {
+    isValFirstName: userData ? isNameValid(userData.firstName) : true,
+    isValLastName: userData ? isNameValid(userData.lastName) : true,
+    isValEmail: userData ? isEmailValid(userData.email) : true,
+    isValCity: userData ? isCityValid(userData.city, allCities) : true,
+    isValPhone: userData ? isPhoneValid(userData.phone) : true,
+  };
+  console.log(validatedData);
 
   return (
     <>
       <h2>Functional</h2>
-      <ProfileInformation
-        userData={userData} //TODO this is broken
-      />
+      {isOnlyTrue(validatedData) ? (
+        <ProfileInformation userData={userData} />
+      ) : null}
+
       <FunctionalForm
         userDataHandler={(pulledData) => {
-          // setIsValEmail(!isEmailValid(pulledData.email));
-          // setIsValFirstName(!isNameValid(pulledData.firstName));
-          // setIsValLastName(!isNameValid(pulledData.lastName));
-          // setValIsCity(!isCityValid(pulledData.city, allCities));
-          // setIsValPhone(!isPhoneValid(pulledData.phone));
-          setUserData(pulledData); //TODO this might be broken
+          validatedData.isValFirstName = isNameValid(pulledData.firstName);
+          validatedData.isValLastName = isNameValid(pulledData.lastName);
+          setUserData(pulledData);
         }}
+        validatedData={validatedData}
       />
     </>
   );
