@@ -45,12 +45,17 @@ export const FunctionalForm = ({
       setCity("");
       setFormPhone(["", "", "", ""]);
     }
+    console.log("Validated Data", validatedData);
+    console.log("formData", formData);
+
+    console.log("isOnlyTrue(input)", isOnlyTrue(input));
+    console.log("Resetting form");
   };
 
   const handleUserData = (e: FormEvent) => {
     e.preventDefault();
     userDataHandler(formData);
-    reset(validatedData);
+    reset(validatedData); //this function is using the wrong data.
   };
 
   return (

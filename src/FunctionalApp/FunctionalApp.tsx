@@ -20,7 +20,7 @@ export const FunctionalApp = () => {
     isValCity: userData ? isCityValid(userData.city, allCities) : true,
     isValPhone: userData ? isPhoneValid(userData.phone) : true,
   };
-  console.log(validatedData);
+  console.log("App Validated Data", validatedData);
 
   return (
     <>
