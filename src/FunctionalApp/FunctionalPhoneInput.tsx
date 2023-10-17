@@ -72,7 +72,7 @@ export const FunctionalPhoneInput = ({
           onKeyDown={(e) => isNum(e)}
           onChange={(e) => {
             handleInput(e, 0);
-            activeInputController(0)(e);
+            //activeInputController(0)(e);
           }}
         />
         -

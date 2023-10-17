@@ -2,7 +2,14 @@ import { FormEvent, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation, ValidatedValues } from "../types";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
-import { isOnlyTrue } from "../utils/validations";
+import {
+  isCityValid,
+  isEmailValid,
+  isNameValid,
+  isOnlyTrue,
+  isPhoneValid,
+} from "../utils/validations";
+import { allCities } from "../utils/all-cities";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -12,13 +19,9 @@ const phoneNumberErrorMessage = "Invalid Phone Number";
 
 type TFunctionalForm = {
   userDataHandler: (data: UserInformation) => void;
-  validatedData: ValidatedValues;
 };
 
-export const FunctionalForm = ({
-  userDataHandler,
-  validatedData,
-}: TFunctionalForm) => {
+export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -37,25 +40,28 @@ export const FunctionalForm = ({
     city,
     phone,
   };
-  const reset = (input: ValidatedValues) => {
-    if (isOnlyTrue(input)) {
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setCity("");
-      setFormPhone(["", "", "", ""]);
-    }
-    console.log("Validated Data", validatedData);
-    console.log("formData", formData);
-
-    console.log("isOnlyTrue(input)", isOnlyTrue(input));
-    console.log("Resetting form");
+  const reset = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setCity("");
+    setFormPhone(["", "", "", ""]);
   };
 
   const handleUserData = (e: FormEvent) => {
     e.preventDefault();
-    userDataHandler(formData);
-    reset(validatedData); //this function is using the wrong data.
+
+    const isDataValid =
+      isEmailValid(email) &&
+      isCityValid(city, allCities) &&
+      isNameValid(firstName) &&
+      isNameValid(lastName) &&
+      isPhoneValid(phone);
+
+    if (isDataValid) {
+      userDataHandler(formData);
+      reset();
+    }
   };
 
   return (
@@ -77,7 +83,7 @@ export const FunctionalForm = ({
       </div>
       <ErrorMessage
         message={firstNameErrorMessage}
-        show={!validatedData.isValFirstName} //the show condition can be simplified into a single value.
+        show={!isNameValid(firstName)} //the show condition can be simplified into a single value.
       />
 
       {/* last name input */}
@@ -93,7 +99,7 @@ export const FunctionalForm = ({
       </div>
       <ErrorMessage
         message={lastNameErrorMessage}
-        show={!validatedData.isValLastName}
+        show={!isNameValid(lastName)}
       />
 
       {/* Email Input */}
@@ -108,10 +114,7 @@ export const FunctionalForm = ({
         />
       </div>
 
-      <ErrorMessage
-        message={emailErrorMessage}
-        show={!validatedData.isValEmail}
-      />
+      <ErrorMessage message={emailErrorMessage} show={!isEmailValid(email)} />
 
       {/* City Input */}
       <div className="input-wrap">
@@ -127,7 +130,7 @@ export const FunctionalForm = ({
       </div>
       <ErrorMessage
         message={cityErrorMessage}
-        show={!validatedData.isValCity}
+        show={!isCityValid(city, allCities)}
       />
 
       <FunctionalPhoneInput
@@ -139,7 +142,7 @@ export const FunctionalForm = ({
 
       <ErrorMessage
         message={phoneNumberErrorMessage}
-        show={!validatedData.isValPhone}
+        show={!isPhoneValid(phone)}
       />
 
       <input type="submit" value="Submit" />
