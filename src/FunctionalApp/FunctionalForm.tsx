@@ -1,12 +1,11 @@
 import { FormEvent, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
-import { UserInformation, ValidatedValues } from "../types";
+import { UserInformation } from "../types";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
 import {
   isCityValid,
   isEmailValid,
   isNameValid,
-  isOnlyTrue,
   isPhoneValid,
 } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
@@ -32,6 +31,8 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
     "",
     "",
   ]);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
   const phone: string = formPhone.join("");
   const formData: UserInformation = {
     firstName,
@@ -61,6 +62,10 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
     if (isDataValid) {
       userDataHandler(formData);
       reset();
+      setIsSubmitted(false);
+    } else {
+      setIsSubmitted(true);
+      alert("Bad data input");
     }
   };
 
@@ -83,7 +88,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
       </div>
       <ErrorMessage
         message={firstNameErrorMessage}
-        show={!isNameValid(firstName)} //the show condition can be simplified into a single value.
+        show={!isNameValid(firstName) && isSubmitted} //the show condition can be simplified into a single value.
       />
 
       {/* last name input */}
@@ -99,7 +104,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
       </div>
       <ErrorMessage
         message={lastNameErrorMessage}
-        show={!isNameValid(lastName)}
+        show={!isNameValid(lastName) && isSubmitted}
       />
 
       {/* Email Input */}
@@ -114,7 +119,10 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
         />
       </div>
 
-      <ErrorMessage message={emailErrorMessage} show={!isEmailValid(email)} />
+      <ErrorMessage
+        message={emailErrorMessage}
+        show={!isEmailValid(email) && isSubmitted}
+      />
 
       {/* City Input */}
       <div className="input-wrap">
@@ -130,7 +138,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
       </div>
       <ErrorMessage
         message={cityErrorMessage}
-        show={!isCityValid(city, allCities)}
+        show={!isCityValid(city, allCities) && isSubmitted}
       />
 
       <FunctionalPhoneInput
@@ -142,7 +150,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
 
       <ErrorMessage
         message={phoneNumberErrorMessage}
-        show={!isPhoneValid(phone)}
+        show={!isPhoneValid(phone) && isSubmitted}
       />
 
       <input type="submit" value="Submit" />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProfileInformation } from "../ProfileInformation";
-import { UserInformation, ValidatedValues } from "../types";
+import { UserInformation } from "../types";
 import { FunctionalForm } from "./FunctionalForm";
 
 export const FunctionalApp = () => {
