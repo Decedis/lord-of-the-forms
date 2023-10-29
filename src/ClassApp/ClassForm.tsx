@@ -8,6 +8,7 @@ import {
   isPhoneValid,
 } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
+import { ClassPhoneInput } from "./ClassPhoneInput";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -147,19 +148,12 @@ export class ClassForm extends Component<TClassForm, State> {
           }
         />
 
-        <div className="input-wrap">
-          <label htmlFor="phone">Phone:</label>
-          <div id="phone-input-wrap">
-            <input type="text" id="phone-input-1" placeholder="55" />
-            -
-            <input type="text" id="phone-input-2" placeholder="55" />
-            -
-            <input type="text" id="phone-input-3" placeholder="55" />
-            -
-            <input type="text" id="phone-input-4" placeholder="5" />
-          </div>
-        </div>
-
+        <ClassPhoneInput
+          phoneState={this.state.formPhone}
+          handlePhone={(phone) => {
+            this.setState({ formPhone: phone });
+          }}
+        />
         <ErrorMessage
           message={phoneNumberErrorMessage}
           show={!isPhoneValid(phone) && this.state.isSubmitted}
