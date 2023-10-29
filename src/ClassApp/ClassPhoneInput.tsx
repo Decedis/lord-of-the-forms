@@ -3,20 +3,21 @@ import { isNum } from "../utils/validations";
 
 export type PhoneInputState = [string, string, string, string];
 
-type TClassForm = {
+type PropsClassForm = {
   phoneState: [string, string, string, string];
   handlePhone: (phone: [string, string, string, string]) => void;
 };
 type State = {
-  phone: [string, string, string, string];
+  phone: PhoneInputState;
 };
-export class ClassPhoneInput extends Component<TClassForm, State> {
+export class ClassPhoneInput extends Component<PropsClassForm, State> {
   state: State = {
-    phone: ["", "", "", ""],
+    phone: this.props.phoneState,
   };
 
   render() {
     const { phoneState, handlePhone } = this.props;
+
     const refs = [
       createRef<HTMLInputElement>(),
       createRef<HTMLInputElement>(),
@@ -54,13 +55,12 @@ export class ClassPhoneInput extends Component<TClassForm, State> {
       e: React.ChangeEvent<HTMLInputElement>,
       index: number
     ) => {
-      const updatedPhone: [string, string, string, string] = [
-        ...this.state.phone,
-      ];
-      updatedPhone[index] = e.target.value; //was phoneState
+      const updatedPhone: [string, string, string, string] = [...phoneState];
+      updatedPhone[index] = e.target.value;
       handlePhone(updatedPhone);
       this.setState({ phone: updatedPhone });
     };
+
     return (
       <div className="input-wrap">
         <label htmlFor="phone">Phone:</label>

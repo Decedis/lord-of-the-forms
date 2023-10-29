@@ -8,7 +8,7 @@ export const FunctionalPhoneInput = ({
   handlePhone,
 }: {
   phoneState: [string, string, string, string];
-  handlePhone: (phone: [string, string, string, string]) => void; //was phone: string[]
+  handlePhone: (phone: [string, string, string, string]) => void;
 }) => {
   // TODO useRef to make phone interactive
 
@@ -52,8 +52,8 @@ export const FunctionalPhoneInput = ({
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
-    const updatedPhone: [string, string, string, string] = [...phone];
-    updatedPhone[index] = e.target.value; //was phoneState
+    const updatedPhone: [string, string, string, string] = [...phoneState];
+    updatedPhone[index] = e.target.value;
     handlePhone(updatedPhone);
     setPhone(updatedPhone);
   };

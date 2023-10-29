@@ -27,6 +27,7 @@ type State = {
   formPhone: [string, string, string, string];
   isSubmitted: boolean;
 };
+
 export class ClassForm extends Component<TClassForm, State> {
   state: State = {
     firstName: "",
@@ -47,6 +48,8 @@ export class ClassForm extends Component<TClassForm, State> {
       city: this.state.city,
       phone,
     };
+    console.log("isSubmitted: ", this.state.isSubmitted);
+
     const reset = () => {
       this.setState({
         firstName: "",
@@ -57,15 +60,14 @@ export class ClassForm extends Component<TClassForm, State> {
         isSubmitted: false,
       });
     };
+    const isDataValid =
+      isEmailValid(this.state.email) &&
+      isCityValid(this.state.city, allCities) &&
+      isNameValid(this.state.firstName) &&
+      isNameValid(this.state.lastName) &&
+      isPhoneValid(phone);
     const handleUserData = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
-      const isDataValid =
-        isEmailValid(this.state.email) &&
-        isCityValid(this.state.city, allCities) &&
-        isNameValid(this.state.firstName) &&
-        isNameValid(this.state.lastName) &&
-        isPhoneValid(phone);
       if (isDataValid) {
         userInformationHandler(formData);
         reset();
