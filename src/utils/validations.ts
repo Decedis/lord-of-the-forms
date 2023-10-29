@@ -1,5 +1,3 @@
-import { ValidatedValues } from "../types";
-
 export function isNameValid(name: string) {
   return name.length >= 2 ? true : false;
 }
@@ -15,17 +13,7 @@ export function isPhoneValid(phone: string) {
   return phone.length === 7;
 }
 //utility to check for falsity
-export const isOnlyTrue = (obj: ValidatedValues) => {
-  let result;
-  for (const key in obj) {
-    if (obj[key] === false) {
-      return (result = false);
-    } else {
-      result = true;
-    }
-  }
-  return result;
-};
+
 // utility to force only numeric values in phoneInput
 export const isNum = (event: React.KeyboardEvent<HTMLInputElement>) => {
   if (!/[0-9]/.test(event.key) && event.key !== "Backspace") {

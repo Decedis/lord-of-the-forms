@@ -10,7 +10,6 @@ type TClassForm = {
 type State = {
   phone: [string, string, string, string];
 };
-
 export class ClassPhoneInput extends Component<TClassForm, State> {
   state: State = {
     phone: ["", "", "", ""],
