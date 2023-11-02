@@ -7,7 +7,10 @@ export function isEmailValid(emailAddress: string) {
   return !!emailAddress.match(regex);
 }
 export function isCityValid(city: string, options: string[]) {
-  return options.includes(city);
+  return options.some(
+    (cityFromOptions: string) =>
+      cityFromOptions.toLowerCase() === city.toLowerCase()
+  );
 }
 export function isPhoneValid(phone: string) {
   return phone.length === 7;
