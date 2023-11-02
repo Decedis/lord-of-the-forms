@@ -11,11 +11,7 @@ export class ClassApp extends Component<Record<string, never>, State> {
     return (
       <>
         <h2>Class</h2>
-        <ProfileInformation
-          userData={
-            this.state.userInformation ? this.state.userInformation : null
-          }
-        />
+        <ProfileInformation userData={this.state.userInformation} />
 
         <ClassForm
           userInformationHandler={(pulledData) => {

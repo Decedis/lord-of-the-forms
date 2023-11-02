@@ -1,20 +1,15 @@
 //import { useState } from "react";
-import { ChangeEventHandler, useRef, useState } from "react";
+import { ChangeEventHandler, useRef } from "react";
 import { isNum } from "../utils/validations";
 
 export type PhoneInputState = [string, string, string, string];
 export const FunctionalPhoneInput = ({
   phoneState,
-  handlePhone,
+  setPhoneState,
 }: {
-  phoneState: [string, string, string, string];
-  handlePhone: (phone: [string, string, string, string]) => void;
+  phoneState: PhoneInputState;
+  setPhoneState: (phone: PhoneInputState) => void;
 }) => {
-  // TODO useRef to make phone interactive
-
-  const [phone, setPhone] =
-    useState<[string, string, string, string]>(phoneState);
-
   const refs = [
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
@@ -36,9 +31,10 @@ export const FunctionalPhoneInput = ({
       const shouldGoToNextRef =
         currentMaxLength === value.length && nextRef?.current;
       const shouldGoToPrevRef = value.length === 0;
-      const newState = phone.map((phoneInput, phoneInputIndex) =>
+      const newState = phoneState.map((phoneInput, phoneInputIndex) =>
         index === phoneInputIndex ? e.target.value : phoneInput
-      ) as PhoneInputState; //converts the resulting string to PhoneInputState
+      ) as PhoneInputState;
+      //converts the resulting string to PhoneInputState
       //as PhoneInputState stops errors. Converts the outcome to the correct type.
       if (shouldGoToNextRef) {
         nextRef.current?.focus();
@@ -46,17 +42,17 @@ export const FunctionalPhoneInput = ({
       if (shouldGoToPrevRef) {
         prevRef.current?.focus();
       }
-      setPhone(newState);
+      setPhoneState(newState);
+      console.log("function called");
     };
-  const handleInput = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const updatedPhone: [string, string, string, string] = [...phoneState];
-    updatedPhone[index] = e.target.value;
-    handlePhone(updatedPhone);
-    setPhone(updatedPhone);
-  };
+  // const handleInput = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   index: number
+  // ) => {
+  //   const updatedPhone: [string, string, string, string] = [...phoneState];
+  //   updatedPhone[index] = e.target.value;
+  //   setPhoneState(updatedPhone);
+  // };
 
   return (
     <div className="input-wrap">
@@ -71,7 +67,7 @@ export const FunctionalPhoneInput = ({
           ref={ref0}
           onKeyDown={(e) => isNum(e)}
           onChange={(e) => {
-            handleInput(e, 0);
+            // handleInput(e, 0);
             activeInputController(0)(e);
           }}
         />
@@ -85,7 +81,7 @@ export const FunctionalPhoneInput = ({
           ref={ref1}
           onKeyDown={(e) => isNum(e)}
           onChange={(e) => {
-            handleInput(e, 1);
+            //handleInput(e, 1);
             activeInputController(1)(e);
           }}
         />
@@ -99,7 +95,7 @@ export const FunctionalPhoneInput = ({
           ref={ref2}
           onKeyDown={(e) => isNum(e)}
           onChange={(e) => {
-            handleInput(e, 2);
+            // handleInput(e, 2);
             activeInputController(2)(e);
           }}
         />
@@ -113,7 +109,7 @@ export const FunctionalPhoneInput = ({
           ref={ref3}
           onKeyDown={(e) => isNum(e)}
           onChange={(e) => {
-            handleInput(e, 3);
+            //handleInput(e, 3);
             activeInputController(3)(e);
           }}
         />

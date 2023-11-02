@@ -9,12 +9,8 @@ export const FunctionalApp = () => {
   return (
     <>
       <h2>Functional</h2>
-      <ProfileInformation userData={userData ? userData : null} />
-      <FunctionalForm
-        userDataHandler={(pulledData) => {
-          setUserData(pulledData);
-        }}
-      />
+      <ProfileInformation userData={userData} />
+      <FunctionalForm userDataHandler={setUserData} />
     </>
   );
 };

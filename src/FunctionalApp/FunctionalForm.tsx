@@ -143,9 +143,7 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
 
       <FunctionalPhoneInput
         phoneState={formPhone}
-        handlePhone={(phone) => {
-          setFormPhone(phone);
-        }}
+        setPhoneState={setFormPhone}
       />
 
       <ErrorMessage
