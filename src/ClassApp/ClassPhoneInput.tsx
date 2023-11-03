@@ -1,22 +1,20 @@
 import { ChangeEventHandler, Component, createRef } from "react";
 import { isNum } from "../utils/validations";
+import { ErrorMessage } from "../ErrorMessage";
 
 export type PhoneInputState = [string, string, string, string];
 
 type PropsClassForm = {
-  phoneState: [string, string, string, string];
-  handlePhone: (phone: [string, string, string, string]) => void;
+  phoneState: PhoneInputState;
+  setPhoneState: (phone: PhoneInputState) => void;
+  errorMessage: string;
+  showCondition: boolean;
 };
-type State = {
-  phone: PhoneInputState;
-};
-export class ClassPhoneInput extends Component<PropsClassForm, State> {
-  state: State = {
-    phone: this.props.phoneState,
-  };
 
+export class ClassPhoneInput extends Component<PropsClassForm> {
   render() {
-    const { phoneState, handlePhone } = this.props;
+    const { phoneState, setPhoneState, errorMessage, showCondition } =
+      this.props;
 
     const refs = [
       createRef<HTMLInputElement>(),
@@ -39,7 +37,7 @@ export class ClassPhoneInput extends Component<PropsClassForm, State> {
         const shouldGoToNextRef =
           currentMaxLength === value.length && nextRef?.current;
         const shouldGoToPrevRef = value.length === 0;
-        const newState = this.state.phone.map((phoneInput, phoneInputIndex) =>
+        const newState = phoneState.map((phoneInput, phoneInputIndex) =>
           index === phoneInputIndex ? e.target.value : phoneInput
         ) as PhoneInputState; //converts the resulting string to PhoneInputState
         //as PhoneInputState stops errors. Converts the outcome to the correct type.
@@ -49,79 +47,70 @@ export class ClassPhoneInput extends Component<PropsClassForm, State> {
         if (shouldGoToPrevRef) {
           prevRef.current?.focus();
         }
-        this.setState({ phone: newState });
+        //this.setState({ phone: newState });
+        setPhoneState(newState);
       };
-    const handleInput = (
-      e: React.ChangeEvent<HTMLInputElement>,
-      index: number
-    ) => {
-      const updatedPhone: [string, string, string, string] = [...phoneState];
-      updatedPhone[index] = e.target.value;
-      handlePhone(updatedPhone);
-      this.setState({ phone: updatedPhone });
-    };
 
     return (
-      <div className="input-wrap">
-        <label htmlFor="phone">Phone:</label>
-        <div id="phone-input-wrap">
-          <input
-            type="text"
-            id="phone-input-1"
-            placeholder="55"
-            value={phoneState[0]}
-            maxLength={2}
-            ref={ref0}
-            onKeyDown={(e) => isNum(e)}
-            onChange={(e) => {
-              handleInput(e, 0);
-              activeInputController(0)(e);
-            }}
-          />
-          -
-          <input
-            type="text"
-            id="phone-input-2"
-            placeholder="55"
-            value={phoneState[1]}
-            maxLength={2}
-            ref={ref1}
-            onKeyDown={(e) => isNum(e)}
-            onChange={(e) => {
-              handleInput(e, 1);
-              activeInputController(1)(e);
-            }}
-          />
-          -
-          <input
-            type="text"
-            id="phone-input-3"
-            placeholder="55"
-            value={phoneState[2]}
-            maxLength={2}
-            ref={ref2}
-            onKeyDown={(e) => isNum(e)}
-            onChange={(e) => {
-              handleInput(e, 2);
-              activeInputController(2)(e);
-            }}
-          />
-          -
-          <input
-            type="text"
-            id="phone-input-4"
-            placeholder="5"
-            value={phoneState[3]}
-            maxLength={1}
-            ref={ref3}
-            onKeyDown={(e) => isNum(e)}
-            onChange={(e) => {
-              handleInput(e, 3);
-              activeInputController(3)(e);
-            }}
-          />
+      <>
+        <div className="input-wrap">
+          <label htmlFor="phone">Phone:</label>
+          <div id="phone-input-wrap">
+            <input
+              type="text"
+              id="phone-input-1"
+              placeholder="55"
+              value={phoneState[0]}
+              maxLength={2}
+              ref={ref0}
+              onKeyDown={(e) => isNum(e)}
+              onChange={(e) => {
+                activeInputController(0)(e);
+              }}
+            />
+            -
+            <input
+              type="text"
+              id="phone-input-2"
+              placeholder="55"
+              value={phoneState[1]}
+              maxLength={2}
+              ref={ref1}
+              onKeyDown={(e) => isNum(e)}
+              onChange={(e) => {
+                activeInputController(1)(e);
+              }}
+            />
+            -
+            <input
+              type="text"
+              id="phone-input-3"
+              placeholder="55"
+              value={phoneState[2]}
+              maxLength={2}
+              ref={ref2}
+              onKeyDown={(e) => isNum(e)}
+              onChange={(e) => {
+                activeInputController(2)(e);
+              }}
+            />
+            -
+            <input
+              type="text"
+              id="phone-input-4"
+              placeholder="5"
+              value={phoneState[3]}
+              maxLength={1}
+              ref={ref3}
+              onKeyDown={(e) => isNum(e)}
+              onChange={(e) => {
+                activeInputController(3)(e);
+              }}
+            />
+          </div>
         </div>
-      </div>
+        <ErrorMessage message={errorMessage} show={showCondition} />
+      </>
     );
   }
 }

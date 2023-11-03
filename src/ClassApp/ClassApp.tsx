@@ -5,7 +5,7 @@ import { ProfileInformation } from "../ProfileInformation";
 type State = { userInformation: UserInformation | null };
 
 export class ClassApp extends Component<Record<string, never>, State> {
-  state = { userInformation: null };
+  state: State = { userInformation: null };
 
   render() {
     return (

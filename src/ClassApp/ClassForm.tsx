@@ -1,5 +1,4 @@
 import { Component, FormEvent } from "react";
-import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation } from "../types";
 import {
   isCityValid,
@@ -9,6 +8,7 @@ import {
 } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
 import { ClassPhoneInput } from "./ClassPhoneInput";
+import { ClassTextInput } from "./ClassTextInput";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -48,7 +48,8 @@ export class ClassForm extends Component<TClassForm, State> {
       city: this.state.city,
       phone,
     };
-    console.log("isSubmitted: ", this.state.isSubmitted);
+    const { firstName, lastName, email, city, formPhone, isSubmitted } =
+      this.state;
 
     const reset = () => {
       this.setState({
@@ -77,6 +78,7 @@ export class ClassForm extends Component<TClassForm, State> {
         alert("Bad data input");
       }
     };
+
     return (
       <form onSubmit={handleUserData}>
         <u>
@@ -84,81 +86,67 @@ export class ClassForm extends Component<TClassForm, State> {
         </u>
 
         {/* first name input */}
-        <div className="input-wrap">
-          <label>{"First Name"}:</label>
-          <input
-            placeholder="Bilbo"
-            value={this.state.firstName}
-            onChange={(e) => {
+        <ClassTextInput
+          labelText="First Name"
+          inputProps={{
+            placeholder: "Bilbo",
+            value: firstName,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
               this.setState({ firstName: e.target.value });
-            }}
-          />
-        </div>
-        <ErrorMessage
-          message={firstNameErrorMessage}
-          show={!isNameValid(this.state.firstName) && this.state.isSubmitted}
+            },
+          }}
+          errorMessage={firstNameErrorMessage}
+          showCondition={!isNameValid(firstName) && isSubmitted}
         />
 
         {/* last name input */}
-        <div className="input-wrap">
-          <label>{"Last Name"}:</label>
-          <input
-            placeholder="Baggins"
-            value={this.state.lastName}
-            onChange={(e) => {
+        <ClassTextInput
+          labelText="Last Name"
+          inputProps={{
+            placeholder: "Baggins",
+            value: lastName,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
               this.setState({ lastName: e.target.value });
-            }}
-          />
-        </div>
-        <ErrorMessage
-          message={lastNameErrorMessage}
-          show={!isNameValid(this.state.lastName) && this.state.isSubmitted}
+            },
+          }}
+          errorMessage={lastNameErrorMessage}
+          showCondition={!isNameValid(lastName) && isSubmitted}
         />
 
         {/* Email Input */}
-        <div className="input-wrap">
-          <label>{"Email"}:</label>
-          <input
-            placeholder="bilbo-baggins@adventurehobbits.net"
-            value={this.state.email}
-            onChange={(e) => {
+        <ClassTextInput
+          labelText="Email"
+          inputProps={{
+            placeholder: "bilbo-baggins@adventurehobbits.net",
+            value: email,
+            onChange: (e) => {
               this.setState({ email: e.target.value });
-            }}
-          />
-        </div>
-        <ErrorMessage
-          message={emailErrorMessage}
-          show={!isEmailValid(this.state.email) && this.state.isSubmitted}
+            },
+          }}
+          errorMessage={emailErrorMessage}
+          showCondition={!isEmailValid(email) && isSubmitted}
         />
 
         {/* City Input */}
-        <div className="input-wrap">
-          <label>{"City"}:</label>
-          <input
-            placeholder="Hobbiton"
-            value={this.state.city}
-            list="cities"
-            onChange={(e) => {
+        <ClassTextInput
+          labelText="City"
+          inputProps={{
+            placeholder: "Hobbiton",
+            value: city,
+            list: "cities",
+            onChange: (e) => {
               this.setState({ city: e.target.value });
-            }}
-          />
-        </div>
-        <ErrorMessage
-          message={cityErrorMessage}
-          show={
-            !isCityValid(this.state.city, allCities) && this.state.isSubmitted
-          }
+            },
+          }}
+          errorMessage={cityErrorMessage}
+          showCondition={!isCityValid(city, allCities) && isSubmitted}
         />
 
         <ClassPhoneInput
-          phoneState={this.state.formPhone}
-          handlePhone={(phone) => {
-            this.setState({ formPhone: phone });
-          }}
-        />
-        <ErrorMessage
-          message={phoneNumberErrorMessage}
-          show={!isPhoneValid(phone) && this.state.isSubmitted}
+          phoneState={formPhone}
+          setPhoneState={(phone) => this.setState({ formPhone: phone })}
+          errorMessage={phoneNumberErrorMessage}
+          showCondition={!isPhoneValid(phone) && isSubmitted}
         />
 
         <input type="submit" value="Submit" />

@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { ErrorMessage } from "../ErrorMessage";
+import { FunctionalTextInput } from "./FunctionalTextInput";
 import { UserInformation } from "../types";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
 import {
@@ -59,14 +59,14 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
       isNameValid(lastName) &&
       isPhoneValid(phone);
 
-    if (isDataValid) {
-      userDataHandler(formData);
-      reset();
-      setIsSubmitted(false);
-    } else {
+    if (!isDataValid) {
       setIsSubmitted(true);
       alert("Bad data input");
+      return;
     }
+    userDataHandler(formData);
+    reset();
+    setIsSubmitted(false);
   };
 
   return (
@@ -76,79 +76,67 @@ export const FunctionalForm = ({ userDataHandler }: TFunctionalForm) => {
       </u>
 
       {/* first name input */}
-      <div className="input-wrap">
-        <label>{"First Name"}:</label>
-        <input
-          placeholder="Bilbo"
-          value={firstName}
-          onChange={(e) => {
+      <FunctionalTextInput
+        labelText="First Name"
+        inputProps={{
+          placeholder: "Bilbo",
+          value: firstName,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
             setFirstName(e.target.value);
-          }}
-        />
-      </div>
-      <ErrorMessage
-        message={firstNameErrorMessage}
-        show={!isNameValid(firstName) && isSubmitted} //the show condition can be simplified into a single value.
+          },
+        }}
+        errorMessage={firstNameErrorMessage}
+        showCondition={!isNameValid(firstName) && isSubmitted}
       />
 
       {/* last name input */}
-      <div className="input-wrap">
-        <label>{"Last Name"}:</label>
-        <input
-          placeholder="Baggins"
-          value={lastName}
-          onChange={(e) => {
+      <FunctionalTextInput
+        labelText="Last Name"
+        inputProps={{
+          placeholder: "Baggins",
+          value: lastName,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
             setLastName(e.target.value);
-          }}
-        />
-      </div>
-      <ErrorMessage
-        message={lastNameErrorMessage}
-        show={!isNameValid(lastName) && isSubmitted}
+          },
+        }}
+        errorMessage={lastNameErrorMessage}
+        showCondition={!isNameValid(lastName) && isSubmitted}
       />
 
       {/* Email Input */}
-      <div className="input-wrap">
-        <label>{"Email"}:</label>
-        <input
-          placeholder="bilbo-baggins@adventurehobbits.net"
-          value={email}
-          onChange={(e) => {
+      <FunctionalTextInput
+        labelText="Email"
+        inputProps={{
+          placeholder: "bilbo-baggins@adventurehobbits.net",
+          value: email,
+          onChange: (e) => {
             setEmail(e.target.value);
-          }}
-        />
-      </div>
-
-      <ErrorMessage
-        message={emailErrorMessage}
-        show={!isEmailValid(email) && isSubmitted}
+          },
+        }}
+        errorMessage={emailErrorMessage}
+        showCondition={!isEmailValid(email) && isSubmitted}
       />
 
       {/* City Input */}
-      <div className="input-wrap">
-        <label>{"City"}:</label>
-        <input
-          placeholder="Hobbiton"
-          value={city}
-          list="cities"
-          onChange={(e) => {
+      <FunctionalTextInput
+        labelText="City"
+        inputProps={{
+          placeholder: "Hobbiton",
+          value: city,
+          list: "cities",
+          onChange: (e) => {
             setCity(e.target.value);
-          }}
-        />
-      </div>
-      <ErrorMessage
-        message={cityErrorMessage}
-        show={!isCityValid(city, allCities) && isSubmitted}
+          },
+        }}
+        errorMessage={cityErrorMessage}
+        showCondition={!isCityValid(city, allCities) && isSubmitted}
       />
 
       <FunctionalPhoneInput
         phoneState={formPhone}
         setPhoneState={setFormPhone}
-      />
-
-      <ErrorMessage
-        message={phoneNumberErrorMessage}
-        show={!isPhoneValid(phone) && isSubmitted}
+        errorMessage={phoneNumberErrorMessage}
+        showCondition={!isPhoneValid(phone) && isSubmitted}
       />
 
       <input type="submit" value="Submit" />

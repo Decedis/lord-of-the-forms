@@ -1,14 +1,19 @@
 //import { useState } from "react";
 import { ChangeEventHandler, useRef } from "react";
 import { isNum } from "../utils/validations";
+import { ErrorMessage } from "../ErrorMessage";
 
 export type PhoneInputState = [string, string, string, string];
 export const FunctionalPhoneInput = ({
   phoneState,
   setPhoneState,
+  errorMessage,
+  showCondition,
 }: {
   phoneState: PhoneInputState;
   setPhoneState: (phone: PhoneInputState) => void;
+  errorMessage: string;
+  showCondition: boolean;
 }) => {
   const refs = [
     useRef<HTMLInputElement>(null),
@@ -55,65 +60,68 @@ export const FunctionalPhoneInput = ({
   // };
 
   return (
-    <div className="input-wrap">
-      <label htmlFor="phone">Phone:</label>
-      <div id="phone-input-wrap">
-        <input
-          type="text"
-          id="phone-input-1"
-          placeholder="55"
-          value={phoneState[0]}
-          maxLength={2}
-          ref={ref0}
-          onKeyDown={(e) => isNum(e)}
-          onChange={(e) => {
-            // handleInput(e, 0);
-            activeInputController(0)(e);
-          }}
-        />
-        -
-        <input
-          type="text"
-          id="phone-input-2"
-          placeholder="55"
-          value={phoneState[1]}
-          maxLength={2}
-          ref={ref1}
-          onKeyDown={(e) => isNum(e)}
-          onChange={(e) => {
-            //handleInput(e, 1);
-            activeInputController(1)(e);
-          }}
-        />
-        -
-        <input
-          type="text"
-          id="phone-input-3"
-          placeholder="55"
-          value={phoneState[2]}
-          maxLength={2}
-          ref={ref2}
-          onKeyDown={(e) => isNum(e)}
-          onChange={(e) => {
-            // handleInput(e, 2);
-            activeInputController(2)(e);
-          }}
-        />
-        -
-        <input
-          type="text"
-          id="phone-input-4"
-          placeholder="5"
-          value={phoneState[3]}
-          maxLength={1}
-          ref={ref3}
-          onKeyDown={(e) => isNum(e)}
-          onChange={(e) => {
-            //handleInput(e, 3);
-            activeInputController(3)(e);
-          }}
-        />
+    <>
+      <div className="input-wrap">
+        <label htmlFor="phone">Phone:</label>
+        <div id="phone-input-wrap">
+          <input
+            type="text"
+            id="phone-input-1"
+            placeholder="55"
+            value={phoneState[0]}
+            maxLength={2}
+            ref={ref0}
+            onKeyDown={(e) => isNum(e)}
+            onChange={(e) => {
+              // handleInput(e, 0);
+              activeInputController(0)(e);
+            }}
+          />
+          -
+          <input
+            type="text"
+            id="phone-input-2"
+            placeholder="55"
+            value={phoneState[1]}
+            maxLength={2}
+            ref={ref1}
+            onKeyDown={(e) => isNum(e)}
+            onChange={(e) => {
+              //handleInput(e, 1);
+              activeInputController(1)(e);
+            }}
+          />
+          -
+          <input
+            type="text"
+            id="phone-input-3"
+            placeholder="55"
+            value={phoneState[2]}
+            maxLength={2}
+            ref={ref2}
+            onKeyDown={(e) => isNum(e)}
+            onChange={(e) => {
+              // handleInput(e, 2);
+              activeInputController(2)(e);
+            }}
+          />
+          -
+          <input
+            type="text"
+            id="phone-input-4"
+            placeholder="5"
+            value={phoneState[3]}
+            maxLength={1}
+            ref={ref3}
+            onKeyDown={(e) => isNum(e)}
+            onChange={(e) => {
+              //handleInput(e, 3);
+              activeInputController(3)(e);
+            }}
+          />
+        </div>
       </div>
-    </div>
+      <ErrorMessage message={errorMessage} show={showCondition} />
+    </>
   );
 };
