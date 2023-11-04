@@ -39,7 +39,8 @@ export class ClassPhoneInput extends Component<PropsClassForm> {
         const shouldGoToPrevRef = value.length === 0;
         const newState = phoneState.map((phoneInput, phoneInputIndex) =>
           index === phoneInputIndex ? e.target.value : phoneInput
-        ) as PhoneInputState; //converts the resulting string to PhoneInputState
+        ) as PhoneInputState;
+        //converts the resulting string to PhoneInputState
         //as PhoneInputState stops errors. Converts the outcome to the correct type.
         if (shouldGoToNextRef) {
           nextRef.current?.focus();
@@ -47,7 +48,7 @@ export class ClassPhoneInput extends Component<PropsClassForm> {
         if (shouldGoToPrevRef) {
           prevRef.current?.focus();
         }
-        //this.setState({ phone: newState });
+
         setPhoneState(newState);
       };
 

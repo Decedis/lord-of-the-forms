@@ -1,4 +1,3 @@
-//import { useState } from "react";
 import { ChangeEventHandler, useRef } from "react";
 import { isNum } from "../utils/validations";
 import { ErrorMessage } from "../ErrorMessage";
@@ -50,14 +49,6 @@ export const FunctionalPhoneInput = ({
       setPhoneState(newState);
       console.log("function called");
     };
-  // const handleInput = (
-  //   e: React.ChangeEvent<HTMLInputElement>,
-  //   index: number
-  // ) => {
-  //   const updatedPhone: [string, string, string, string] = [...phoneState];
-  //   updatedPhone[index] = e.target.value;
-  //   setPhoneState(updatedPhone);
-  // };
 
   return (
     <>
@@ -73,7 +64,6 @@ export const FunctionalPhoneInput = ({
             ref={ref0}
             onKeyDown={(e) => isNum(e)}
             onChange={(e) => {
-              // handleInput(e, 0);
               activeInputController(0)(e);
             }}
           />
@@ -87,7 +77,6 @@ export const FunctionalPhoneInput = ({
             ref={ref1}
             onKeyDown={(e) => isNum(e)}
             onChange={(e) => {
-              //handleInput(e, 1);
               activeInputController(1)(e);
             }}
           />
@@ -101,7 +90,6 @@ export const FunctionalPhoneInput = ({
             ref={ref2}
             onKeyDown={(e) => isNum(e)}
             onChange={(e) => {
-              // handleInput(e, 2);
               activeInputController(2)(e);
             }}
           />
@@ -115,7 +103,6 @@ export const FunctionalPhoneInput = ({
             ref={ref3}
             onKeyDown={(e) => isNum(e)}
             onChange={(e) => {
-              //handleInput(e, 3);
               activeInputController(3)(e);
             }}
           />
